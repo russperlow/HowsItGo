@@ -35,6 +35,10 @@ function spotifyInit(){
 }
 
 window.onSpotifyWebPlaybackSDKReady = () => {
+
+    // ONLY FOR WHEN TESTING WITHOUT AUTHENTICATION KEY
+    return;
+
     const token = SPOTIFY_PLAYER_ACCESS_TOKEN;
     const player = new Spotify.Player({
       name: 'Web Playback SDK Quick Start Player',
@@ -85,7 +89,8 @@ function loadPlaylists(){
 // Returns the playlists that have been loaded
 function getPlaylist(){
     if(playlists.length == 0)
-        loadPlaylists();
+        // loadPlaylists();
+    names = ["Drake v. Meek", "Chill", "Music TBT"];
     return names;
 }
 

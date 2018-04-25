@@ -19,15 +19,41 @@ Vue.component('playlist-list', {
     </div>`
 });
 
+Vue.component('playlist-nested-collapse', {
+    props:['list', 'index', 'id'],
+    template:   `<b-card>
+                    <b-btn v-b-toggle="id">{{list}}</b-btn>
+                    <b-collapse :id="id">
+                        <b-card>Song id:{{id}} index: {{index}}</b-card>
+                    </b-collapse>
+                </b-card>`
+});
+
+Vue.component('playlist-collapse', {
+    props:['lists', 'title', 'count'],
+    template:   `<div>
+                    <b-btn v-b-toggle.collapse1 variant="primary">Playlists</b-btn>
+                    <b-collapse id="collapse1" class="mt-2">
+                        <b-card is="playlist-nested-collapse" v-for="(list, index) in lists" v-bind:list="list" v-bind:index="index" v-bind:id="count[index]">
+                        </b-card>
+                    </b-collapse>
+                </div>`
+
+});
+
 let app = new Vue({
     el: '#root',
     data: {
         titleHeader: "Playlists:",
-        lists: []
+        lists: [],
+        count: []
     },
     methods:{
         initPlayLists(playlists){
             this.lists = playlists;
+            for(let i = 0; i < this.lists.length; i++){
+                this.count[i] = i.toString();
+            }
         }
     }
 });
