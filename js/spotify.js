@@ -71,6 +71,13 @@ function requestAuthorization(){
 
 // Gets playlists from Spotify
 function loadPlaylists(){
+
+    // TESTING PURPOSES ONLY
+    playlists.push(new Playlist("link1", "342lnf423q", "Drake v. Meek"));
+    playlists.push(new Playlist("link2", "gsfdgsdh43", "Chill"));
+    playlists.push(new Playlist("link3", "h5634jjehg", "Music TBT"));
+    return;
+
     $.ajax({
         url: 'https://api.spotify.com/v1/me/playlists',
         headers: {
@@ -89,9 +96,10 @@ function loadPlaylists(){
 // Returns the playlists that have been loaded
 function getPlaylist(){
     if(playlists.length == 0)
-        // loadPlaylists();
-    names = ["Drake v. Meek", "Chill", "Music TBT"];
-    return names;
+        loadPlaylists();
+    return playlists;
+    // names = ["Drake v. Meek", "Chill", "Music TBT"];
+    // return names;
 }
 
 // General function for accessing spotify api
@@ -119,16 +127,6 @@ function playDemo(){
      console.log(data)
    }
   });
-    // fetchTrack("4aawyAB9vmqN3uQ7FjRGTy", function(data){
-    //     audioObject = new Audio(data.tracks.items[0].preview_url);
-    //     audioObject.play();
-    //     audioObject.addEventListener('ended', function(){
-
-    //     });
-    //     audioObject.addEventListener('pause', function(){
-
-    //     });
-    // });
 }
 
 function fetchTrack(albumId, callback){
@@ -148,5 +146,16 @@ class Playlist{
         this.link = link;
         this.id = id;
         this.name = name;
+        this.songs = [new Song("link1", "id123", "Title 1", "Artist 1", "Album 1"), new Song("link2", "id456", "Title 2", "Artist 2", "Album 2")];
+    }
+}
+
+class Song{
+    constructor(link, id, title, artist, album){
+        this.link = link;
+        this.id = id;
+        this.title = title;
+        this.artist = artist;
+        this.album = album;
     }
 }

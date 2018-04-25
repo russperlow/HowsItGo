@@ -19,26 +19,31 @@ Vue.component('playlist-list', {
     </div>`
 });
 
+Vue.component('playlist-nested-song',{
+    props:['song', 'index'],
+    template:   `<b-card>{{song.title}}</b-card>`
+});
+
 Vue.component('playlist-nested-collapse', {
-    props:['list', 'index', 'id'],
+    props:['list', 'index'],
     template:   `<b-card>
-                    <b-btn v-b-toggle="id">{{list}}</b-btn>
-                    <b-collapse :id="id">
-                        <b-card>Song id:{{id}} index: {{index}}</b-card>
+                    <b-btn v-b-toggle="list.id">{{list.name}}</b-btn>
+                    <b-collapse :id="list.id">
+                        <b-card is="playlist-nested-song" v-for="(song, index2) in list.songs" v-bind:song="song" v-bind:index="index2">
+                        </b-card>
                     </b-collapse>
                 </b-card>`
 });
 
 Vue.component('playlist-collapse', {
-    props:['lists', 'title', 'count'],
+    props:['lists', 'title'],
     template:   `<div>
-                    <b-btn v-b-toggle.collapse1 variant="primary">Playlists</b-btn>
+                    <b-btn v-b-toggle.collapse1 variant="secondary">Playlists</b-btn>
                     <b-collapse id="collapse1" class="mt-2">
-                        <b-card is="playlist-nested-collapse" v-for="(list, index) in lists" v-bind:list="list" v-bind:index="index" v-bind:id="count[index]">
+                        <b-card is="playlist-nested-collapse" v-for="(list, index) in lists" v-bind:list="list" v-bind:index="index">
                         </b-card>
                     </b-collapse>
                 </div>`
-
 });
 
 let app = new Vue({
@@ -46,13 +51,16 @@ let app = new Vue({
     data: {
         titleHeader: "Playlists:",
         lists: [],
-        count: []
     },
     methods:{
-        initPlayLists(playlists){
+        loadPlaylists(playlists){
             this.lists = playlists;
+        },
+        populatePlaylist(songs, id){
             for(let i = 0; i < this.lists.length; i++){
-                this.count[i] = i.toString();
+                if(id = this.lists[i].id){
+
+                }
             }
         }
     }
@@ -63,7 +71,7 @@ function init(){
     document.querySelector("#playDemoBtn").onclick = function(event){playDemo();}
 
     let playlistBtn = document.querySelector("#getPlaylistsBtn");
-    playlistBtn.onclick = function(event){app.initPlayLists(getPlaylist());};
+    playlistBtn.onclick = function(event){app.loadPlaylists(getPlaylist());};
 
     spotifyInit();
 }
