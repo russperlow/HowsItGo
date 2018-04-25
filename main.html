@@ -59,6 +59,19 @@
                 <playlist-list v-bind:lists="lists" v-bind:title="titleHeader"></playlist-list>
                 <button id="playDemoBtn">Play Demo</button>
             </div>
+
+            <div>
+                <b-btn v-b-toggle.playlistCollapse variant="primary">Playlists</b-btn>
+                <b-collapse id="playlistCollapse">
+                    <b-card>
+                        <b-btn v-b-toggle.playlistInner>Playlist Name</b-btn>
+                        <b-collapse id=playlistInner>
+                            <b-card>Song</b-card>
+                        </b-collapse>
+                    </b-card>
+                </b-collapse>
+            </div>
+
             <div id="searchArea">
                 <p>Enter a song and artist to find the lyrics:</p>
                 <label for="title">Song Title</label>
@@ -72,6 +85,6 @@
         </div>
     </section>
     <script src="https://sdk.scdn.co/spotify-player.js"></script>
-    <script src="js/init.js" type="module"></script>
+    <script src="dist/bundle.js"></script>
 </body>
 </html>
