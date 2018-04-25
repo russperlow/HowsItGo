@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>How's It Go?</title>
+
+  <style type="text/css">
+  	body{
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+  		min-width:600px;
+  		font-family:verdana,tahoma,sans-serif;
+  	}
+  	#finder{
+        width: 100%;
+        text-align: center;
+        margin: 0 auto;
+  	}
+    
+    #content {
+        margin-top: 40px;
+        width: 100%;
+    }
+  	
+  	.item{
+        width: 30%;
+        margin: 0 auto;
+  		border:1px solid black;
+  		padding:5px;
+        margin-top: 10px;
+        border-radius: 4px;
+        background-color: #3B94D9;
+        color: white; 
+        font-size: 1.1em;
+  	}
+    
+    .profileImg {
+        width: 25px;
+        height: 25px;
+    }
+  	
+  </style>
+  <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
+  <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
+  <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+    <section id="finder">
+        <div id="root">
+            <h3>How's It Go?</h3>
+            <div>
+                <button id="authorizeSpotifyBtn" hidden="true">Authorize Spotify</button>
+                <button id="getPlaylistsBtn">Get Playlists</button>
+                <playlist-list v-bind:lists="lists" v-bind:title="titleHeader"></playlist-list>
+                <button id="playDemoBtn">Play Demo</button>
+            </div>
+            <div id="searchArea">
+                <p>Enter a song and artist to find the lyrics:</p>
+                <label for="title">Song Title</label>
+                <input id="title" name="title" type="text">
+                <label for="artist">Artist</label>
+                <input id="artist" name="artist" type="text">
+                <button id="search">Search</button>
+            </div>
+            <section id="content">
+            </section>
+        </div>
+    </section>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script src="js/init.js" type="module"></script>
+</body>
+</html>
