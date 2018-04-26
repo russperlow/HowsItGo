@@ -1,8 +1,8 @@
-export {spotifyInit, requestAuthorization, getPlaylist, playDemo, getPlaylistSongs};
+export {spotifyInit, requestAuthorization, getPlaylist, playDemo, getPlaylistSongs, playSong};
 "use strict";
 
 const URL_AUTHORIZE = '';
-const SPOTIFY_PLAYER_ACCESS_TOKEN = "BQDcf_5F9pDJJRN8IpA90tZBGPS-0P7AGc-9GXzg6ueIbSQnfqt5ZoTpEZZkCcbM0ej7-YNzuQr-svydmTecBIeITvTYHJoXCrp-o75JlNNs5-Jhsq1KOyXpX6HrzaoKIKWqdQ-Ew_KrLeSihQxXefbsd2jQDMqjEbfKdA"; // Special Playback SDK id
+const SPOTIFY_PLAYER_ACCESS_TOKEN = "BQAAO-S1FAUOS9dJ0MR2OMZUP0wn1-PPElfNrIwxxbPFE944w7eWIMPYc-jSor5bkqfbGIfPNbGoBH1mwjtRatFPm7tuByyXfcDt4SkVFYNkitxcbOl829ScIWCXud_owlhsS4CQqPYx1Y-UvnB6L4oFEiNVyha1Z3YUOA"; // Special Playback SDK id
 let accessToken = " ";
 let redirect_uri = "https://people.rit.edu/rep4975/330/HowsItGo/main.html";
 let client_id = "27a24f33f6b8467991e0b78665a190e2"; // My client ID for authorization
@@ -12,6 +12,7 @@ let user_id = ""; // The id of the user who signed in
 let display_name = ""; // The display name of the user who signed in
 let playlists = [];
 let names = [];
+let audioObject = null;
 
 function spotifyInit(){
     URL = 'https://accounts.spotify.com/authorize?client_id=' + client_id + '&redirect_uri=' + encodeURIComponent(redirect_uri) + "&scope=user-read-playback-state%20user-modify-playback-state&response_type=token"; 
@@ -106,21 +107,15 @@ function getPlaylist(callback){
     else{
         callback(playlists);
     }
-    // return playlists;
 }
 
+// Get songs for the given playlist id
 function getPlaylistSongs(playlist_id){
-    let currentPlaylist;
-
-    for(let i = 0; i < playlists.length; i++){
-        if(playlists[i].id == playlist_id){
-            currentPlaylist = playlists[i];
-            break;
-        }
-    }
+    let currentPlaylist = getPlaylistById(playlist_id);
+    let url = currentPlaylist.link + "/tracks";
 
     $.ajax({
-        url: 'https://api.spotify.com/v1/users/' + user_id + "/playlists/" + playlist_id + "/tracks",
+        url: url, //'https://api.spotify.com/v1/users/' + user_id + "/playlists/" + playlist_id + "/tracks",
         headers: {
             'Authorization': 'Bearer ' + accessToken
         },
@@ -130,6 +125,7 @@ function getPlaylistSongs(playlist_id){
     });
 }
 
+// Add all of the playlist songs to the object
 function populatePlaylist(obj, currentPlaylist){
     let items = obj.items;
     let songs = []
@@ -161,20 +157,33 @@ function accessSpotifyAPI(){
     });
 }
 
-let audioObject = null;
-
+// Play the demo song
 function playDemo(){
     $.ajax({
-   url: "https://api.spotify.com/v1/me/player/play?device_id=" + deviceId,
-   type: "PUT",
-   data: '{"uris": ["spotify:track:5ya2gsaIhTkAuWYEMB0nw5"]}',
-   beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken );},
-   success: function(data) { 
-     console.log(data)
-   }
-  });
+        url: "https://api.spotify.com/v1/me/player/play?device_id=" + deviceId,
+        type: "PUT",
+        data: '{"uris": ["spotify:track:5ya2gsaIhTkAuWYEMB0nw5"]}',
+        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken );},
+        success: function(data) { 
+            console.log(data)
+        }
+    });
 }
 
+// Play the song using the given id
+function playSong(id){
+    $.ajax({
+        url: "https://api.spotify.com/v1/me/player/play?device_id=" + deviceId,
+        type: "PUT",
+        data: '{"uris": ["spotify:track:' + id + '"]}',
+        beforeSend: function(xhr){xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);},
+        success: function(data){
+            console.log(data);
+        }
+    });
+}
+
+// Get the the given album
 function fetchTrack(albumId, callback){
     $.ajax({
         url: 'https://api.spotify.com/v1/albums/' + albumId,
@@ -187,13 +196,22 @@ function fetchTrack(albumId, callback){
     });
 }
 
+
+// Gets the playlist by the matching id
+function getPlaylistById(id){
+    for(let i = 0; i < playlists.length; i++){
+        if(id == playlists[i].id)
+            return playlists[i];
+    }
+    return null;
+}
+
 class Playlist{
     constructor(link, id, name){
         this.link = link;
         this.id = id;
         this.name = name;
         this.songs = [];
-        // this.songs = [new Song("link1", "id123", "Title 1", "Artist 1", "Album 1"), new Song("link2", "id456", "Title 2", "Artist 2", "Album 2")];
     }
 
     loadSongs(songs){

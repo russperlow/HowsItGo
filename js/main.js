@@ -1,32 +1,32 @@
 import {search} from './lyrics.js';
-import {spotifyInit, requestAuthorization, getPlaylist, playDemo, getPlaylistSongs} from './spotify.js';
+import {spotifyInit, requestAuthorization, getPlaylist, playDemo, getPlaylistSongs, playSong} from './spotify.js';
 export {init};
 
 // window.onload = init();
 
-Vue.component('playlist-element',{
-    props:['list', 'index'],
-    template: `<li v-text="list"></li>`
-});
+// Vue.component('playlist-element',{
+//     props:['list', 'index'],
+//     template: `<li v-text="list"></li>`
+// });
 
-Vue.component('playlist-list', {
-    props:['lists', 'title'],
-    template:`<div>
-        <h2> {{ title }} </h2>
-        <ul>
-            <li is="playlist-element" v-for="(list,index) in lists" v-bind:list="list" v-bind:index="index"></li>
-        </ul>
-    </div>`
-});
+// Vue.component('playlist-list', {
+//     props:['lists', 'title'],
+//     template:`<div>
+//         <h2> {{ title }} </h2>
+//         <ul>
+//             <li is="playlist-element" v-for="(list,index) in lists" v-bind:list="list" v-bind:index="index"></li>
+//         </ul>
+//     </div>`
+// });
 
 Vue.component('playlist-nested-song',{
     props:['song', 'index'],
     template:   `<b-card>
-                    <button v-on:click="songClick">{{song.title}}</button>
+                    <button v-on:click="songClick" :id="song.id">{{song.title}}</button>
                 </b-card>`,
     methods: {
         songClick: function(event){
-            console.log("Event");
+            playSong(event.target.id);
         }
     }        
 });
@@ -69,13 +69,6 @@ let app = new Vue({
     methods:{
         loadPlaylists(playlists){
             this.lists = playlists;
-        },
-        populatePlaylist(songs, id){
-            for(let i = 0; i < this.lists.length; i++){
-                if(id = this.lists[i].id){
-
-                }
-            }
         }
     }
 });
