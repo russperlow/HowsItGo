@@ -2,7 +2,7 @@ export {spotifyInit, requestAuthorization, getPlaylist, playDemo, getPlaylistSon
 "use strict";
 
 const URL_AUTHORIZE = '';
-const SPOTIFY_PLAYER_ACCESS_TOKEN = "BQAPZHccI5MqUYSeT4CTD2PccgNalIC5A3CI92y56Fo-9fnJ7w7q83Pbs5YhN1ZqGuBYMYzUWZ88p0tBH5JcyJzFspv3cPOMa60rTZtwBu6lCA8OtlLRiOKhKdNfXMH00OpghJXqIE4yjAUhFowu_yn-Brcjvbg1EXWS3g"; // Special Playback SDK id
+const SPOTIFY_PLAYER_ACCESS_TOKEN = "BQDcf_5F9pDJJRN8IpA90tZBGPS-0P7AGc-9GXzg6ueIbSQnfqt5ZoTpEZZkCcbM0ej7-YNzuQr-svydmTecBIeITvTYHJoXCrp-o75JlNNs5-Jhsq1KOyXpX6HrzaoKIKWqdQ-Ew_KrLeSihQxXefbsd2jQDMqjEbfKdA"; // Special Playback SDK id
 let accessToken = " ";
 let redirect_uri = "https://people.rit.edu/rep4975/330/HowsItGo/main.html";
 let client_id = "27a24f33f6b8467991e0b78665a190e2"; // My client ID for authorization

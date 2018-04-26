@@ -1,0 +1,78 @@
+body{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    min-width: 600px;
+    background-color: rgba(0, 0, 0, 0.3);
+    font-family: verdana,tahoma,sans-serif;
+}
+#finder{
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+#content {
+    margin-top: 40px;
+    width: 100%;
+}
+
+#playlists{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 20%;
+    height: 100%;
+    align-content: center;
+}
+
+.card-body{
+    padding:0;
+}
+
+.btn-secondary{
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+#playlist-collapse-card{
+    margin: 0;
+    padding: 0;
+
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#playlist-collapse{
+    width: 100%;
+    height: 10%;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: solid 1px black;
+}
+
+.playlist-nested{
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: solid 1px black;
+} 
+
+.playlist-nested-card{
+    width: 100%;
+    border: solid 1px black;
+}
+
+.item{
+    width: 30%;
+    margin: 0 auto;
+    border:1px solid black;
+    padding:5px;
+    margin-top: 10px;
+    border-radius: 4px;
+    background-color: #3B94D9;
+    color: white; 
+    font-size: 1.1em;
+}
+
+.profileImg {
+    width: 25px;
+    height: 25px;
+}
