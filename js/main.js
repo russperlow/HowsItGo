@@ -2,31 +2,14 @@ import {search} from './lyrics.js';
 import {spotifyInit, requestAuthorization, getPlaylist, playDemo, getPlaylistSongs, playSong} from './spotify.js';
 export {init};
 
-// window.onload = init();
-
-// Vue.component('playlist-element',{
-//     props:['list', 'index'],
-//     template: `<li v-text="list"></li>`
-// });
-
-// Vue.component('playlist-list', {
-//     props:['lists', 'title'],
-//     template:`<div>
-//         <h2> {{ title }} </h2>
-//         <ul>
-//             <li is="playlist-element" v-for="(list,index) in lists" v-bind:list="list" v-bind:index="index"></li>
-//         </ul>
-//     </div>`
-// });
-
 Vue.component('playlist-nested-song',{
     props:['song', 'index'],
     template:   `<b-card>
-                    <button v-on:click="songClick" :id="song.id">{{song.title}}</button>
+                    <button v-on:click="songClick" :id="song.id" :class="{song: song}">{{song.title}}</button>
                 </b-card>`,
     methods: {
         songClick: function(event){
-            playSong(event.target.id);
+            playSong(this.song);
         }
     }        
 });

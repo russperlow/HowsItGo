@@ -24,6 +24,14 @@ function search(){
     });
 }
 
+function search(artist, title){
+    let type = "GET";
+    let url = URL + encodeURIComponent(artist) + "/" + encodeURIComponent(title) + "?apikey=" + APIKEY;
+    let data = {};
+
+    ajax(type, url, data, function(response, xhr){jsonLoaded(response);});
+}
+
 // ajax for lyrics
 function ajax(type, url, data, callback){
     
