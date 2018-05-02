@@ -52,6 +52,10 @@ let app = new Vue({
     methods:{
         loadPlaylists(playlists){
             this.lists = playlists;
+        },
+        authorizeSpotify(){
+            console.log("Clicked");
+            requestAuthorization();
         }
     }
 });
@@ -59,9 +63,8 @@ let app = new Vue({
 
 function init(){
     document.querySelector("#search").onclick = function(event){search();}
-    document.querySelector("#playDemoBtn").onclick = function(event){playDemo();}
 
-    let playlistBtn = document.querySelector("#getPlaylistsBtn");
+    let playlistBtn = document.querySelector("#playlist-collapse");
     playlistBtn.onclick = function(event){
         getPlaylist(function(playlists){
             app.loadPlaylists(playlists);

@@ -3,18 +3,18 @@ import {search} from './lyrics.js';
 
 "use strict";
 
-const URL_AUTHORIZE = '';
-const SPOTIFY_PLAYER_ACCESS_TOKEN = "BQDFbQ62hy5JbNesCDrQLqheBVhoZSOsvpXiW3DD8sQzpi5zhaj3mLAFSykCHPYAm3_ZXKkExNXZUaNzH-YZoZmCuiJVzNehcP-0cDgF8dVf2xrOdmlHfP-031rVb9ob01bRitC-t8D5Of9fqro2ir5N_ellwp4dBPN2Sw"; // Special Playback SDK id
+const SPOTIFY_PLAYER_ACCESS_TOKEN = "BQBc1rxF_8XRqqgZSBzaK0U2AxZPAR4HUZ_x2z-Rh91cEXOBZLC65QmX4zsF5AyOMZC2edYQ5IkPmk4HeCTGXEZoptTSnek07JVswqRdsV8fCTnAD4RKbIyD1jBlkqCg7e5bcYmJGgNb_zkJpSewzUyM1rtRg99kcqmBFQ"; // Special Playback SDK id
 let accessToken = " ";
-let redirect_uri = "https://people.rit.edu/rep4975/330/HowsItGo/main.html";
-let client_id = "27a24f33f6b8467991e0b78665a190e2"; // My client ID for authorization
-let URL = "";
+const redirect_uri = "https://people.rit.edu/rep4975/330/HowsItGo/main.html";
+const client_id = "27a24f33f6b8467991e0b78665a190e2"; // My client ID for authorization
+let URL = ""; // The url for getting authorization
 let deviceId = ""; // id of the device this is running on 
 let user_id = ""; // The id of the user who signed in
 let display_name = ""; // The display name of the user who signed in
-let playlists = [];
-let names = [];
-let audioObject = null;
+let playlists = []; // Lists of the users playlists
+
+
+let testing = true;
 
 function spotifyInit(){
     URL = 'https://accounts.spotify.com/authorize?client_id=' + client_id + '&redirect_uri=' + encodeURIComponent(redirect_uri) + "&scope=user-read-playback-state%20user-modify-playback-state&response_type=token"; 
@@ -29,20 +29,28 @@ function spotifyInit(){
         console.log("Received spotify access token: " + accessToken);
 
         accessSpotifyAPI();
+
+        $("#authorize").hide();
+        $("#playlists").show();
     }
     else if(currentURL.includes("error")){
         let temp = currentURL.split('=');
         console.log("Error receiving spotify access token: " + temp[1]);
     }
     else{
-        let authorizeBtn = document.querySelector("#authorizeSpotifyBtn");
-        authorizeBtn.onclick = function(event){requestAuthorization();};
-        authorizeBtn.hidden = false;
+        $("#authorize").show();
+        $("#playlists").hide();
+    }
+
+    if(testing){
+        $("#authorize").hide();
+        $("#playlists").show();
     }
 }
 
 // Redirects to the spotify authorization page
 function requestAuthorization(){
+    console.log("Authorization");
     window.location.href = URL;
 }
 
@@ -55,17 +63,19 @@ function accessSpotifyAPI(){
 function loadPlaylists(callback){
 
     // TESTING PURPOSES ONLY
-    // playlists.push(new Playlist("link1", "342lnf423q", "Drake v. Meek"));
-    // playlists.push(new Playlist("link2", "gsfdgsdh43", "Chill"));
-    // playlists.push(new Playlist("link3", "h5634jjehg", "Music TBT"));
-    // return;
+    if(testing){
+        playlists.push(new Playlist("link1", "342lnf423q", "Drake v. Meek"));
+        playlists.push(new Playlist("link2", "gsfdgsdh43", "Chill"));
+        playlists.push(new Playlist("link3", "h5634jjehg", "Music TBT"));
+        callback(playlists);
+        return;
+    }
 
     let url = 'https://api.spotify.com/v1/me/playlists';
     let success = function(response){
         let items = response.items;
             for(let i = 0; i < items.length; i++){
                 playlists.push(new Playlist(items[i].href, items[i].id, items[i].name));
-                names.push(items[i].name);
             }
             callback(playlists);
     };
@@ -85,6 +95,19 @@ function getPlaylist(callback){
 // Get songs for the given playlist id
 function getPlaylistSongs(playlist_id){
     let currentPlaylist = getPlaylistById(playlist_id);
+
+    // FOR TESTING PURPOSES ONLY
+    if(testing){
+        let track1 = {album: "Album1", artists: [{name: "Artist1"}], id: "id1", link: "link1", name: "Title1"};
+        let track2 = {album: "Album2", artists: [{name: "Artist2"}], id: "id2", link: "link2", name: "Title2"};
+        let track3 = {album: "Album3", artists: [{name: "Artist3"}], id: "id3", link: "link3", name: "Title3"};
+        let obj = {
+            items: [{track: track1}, {track: track2}, {track: track3}]
+        };
+        populatePlaylist(obj, currentPlaylist);
+        return;
+    }
+
     let url = currentPlaylist.link + "/tracks";
 
     ajaxCall(url, null, function(response){populatePlaylist(response, currentPlaylist);});
@@ -110,6 +133,11 @@ function populatePlaylist(obj, currentPlaylist){
 
 // Play the song using the given song obj
 function playSong(song){
+
+    // LOCAL TESTING ONLY
+    if(testing)
+        return;
+
     let url = 'https://api.spotify.com/v1/me/player/play?device_id=' + deviceId;
     let data = '{"uris": ["spotify:track:' + song.id + '"]}';
     let success = function(response){
@@ -126,12 +154,6 @@ function playDemo(){
     let data = '{"uris": ["spotify:track:5ya2gsaIhTkAuWYEMB0nw5"]}';
     ajaxCall(url, data, function(data){console.log(data);}, "PUT");
 }
-
-// // Get the the given album
-// function fetchTrack(albumId, callback){
-//     let url = 'https://api.spotify.com/v1/albums' + albumId;
-//     ajaxCall(url, null, callback(response));
-// }
 
 // Simplifies ajax calls into one method instead of having a lot
 function ajaxCall(url, data, success, type="GET"){
@@ -161,7 +183,8 @@ function getPlaylistById(id){
 window.onSpotifyWebPlaybackSDKReady = () => {
 
     // ONLY FOR WHEN TESTING WITHOUT AUTHENTICATION KEY
-    // return;
+    if(testing)
+        return;
 
     const token = SPOTIFY_PLAYER_ACCESS_TOKEN;
     const player = new Spotify.Player({

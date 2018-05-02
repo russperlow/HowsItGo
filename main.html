@@ -16,10 +16,8 @@
     <section id="finder">
         <div id="root">
             <h3>How's It Go?</h3>
-            <div>
-                <button id="authorizeSpotifyBtn" hidden="true">Authorize Spotify</button>
-                <button id="getPlaylistsBtn">Get Playlists</button>
-                <button id="playDemoBtn">Play Demo</button>
+            <div id="authorize">
+                <b-button id="authorizeSpotifyBtn" v-on:click="authorizeSpotify">Authorize Spotify</b-button>
             </div>
 
             <div id="playlists">
