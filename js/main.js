@@ -18,7 +18,7 @@ Vue.component('playlist-nested-collapse', {
     props:['list', 'index'],
     template:   `<b-card class="playlist-nested-card">
                     <b-btn v-b-toggle="list.id" :id="list.id"class="playlist-nested" v-on:click="playlistClick">{{list.name}}</b-btn>
-                    <b-collapse :id="list.id">
+                    <b-collapse :id="list.id" class="scrollbar-playlist scrollbar-primary">
                         <b-card is="playlist-nested-song" v-for="(song, index2) in list.songs" v-bind:song="song" v-bind:index="index2">
                         </b-card>
                     </b-collapse>

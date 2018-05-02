@@ -59,6 +59,18 @@ body{
   background-color: #120A3D; 
 }
 
+.scrollbar-playlist{
+    /* border: 5px solid #412854; */
+    border: 1px solid rgba(65, 40, 84, .22);
+    width: 100%;
+    background-color: rgba(65, 40, 84, .22); 
+    padding: 2.5%;
+    float: left;
+    height: 750px;
+    overflow-y: scroll;
+    color: rgba(255, 255, 255, 200);
+}
+
 #authorize, #playlists{
     position: absolute; 
     left: 0px;
@@ -100,6 +112,7 @@ body{
 
 .playlist-nested{
     width: 100%;
+    text-overflow: ellipsis;
     background-color: rgba(18, 10, 61, 1);
 } 
 
