@@ -3,7 +3,7 @@ import {search} from './lyrics.js';
 
 "use strict";
 
-const SPOTIFY_PLAYER_ACCESS_TOKEN = "BQBc1rxF_8XRqqgZSBzaK0U2AxZPAR4HUZ_x2z-Rh91cEXOBZLC65QmX4zsF5AyOMZC2edYQ5IkPmk4HeCTGXEZoptTSnek07JVswqRdsV8fCTnAD4RKbIyD1jBlkqCg7e5bcYmJGgNb_zkJpSewzUyM1rtRg99kcqmBFQ"; // Special Playback SDK id
+const SPOTIFY_PLAYER_ACCESS_TOKEN = "BQAcQ5tcYvEdZ4TD2OViHYlTXyixZcWzcJWY-DI76Q4pqkXkMs_YNNFRBJkYq9dIKXtijH9_KxgfuSrHWirALp6vsBx3_BpxT7oeT0__YIuXhnHkilxKKMZ6KyDGoHuogP-Fr1DFqvlizEGKC_sBu8sh1L857-AtCO7cWg"; // Special Playback SDK id
 let accessToken = " ";
 const redirect_uri = "https://people.rit.edu/rep4975/330/HowsItGo/main.html";
 const client_id = "27a24f33f6b8467991e0b78665a190e2"; // My client ID for authorization
@@ -14,13 +14,13 @@ let display_name = ""; // The display name of the user who signed in
 let playlists = []; // Lists of the users playlists
 
 
-let testing = true;
+let testing = false;
 
 function spotifyInit(){
     URL = 'https://accounts.spotify.com/authorize?client_id=' + client_id + '&redirect_uri=' + encodeURIComponent(redirect_uri) + "&scope=user-read-playback-state%20user-modify-playback-state&response_type=token"; 
 
     let currentURL = window.location.href;
-    
+
     if(currentURL.includes("access_token=")){
         // Get the access token
         let temp = currentURL.split('=')[1];
@@ -32,19 +32,23 @@ function spotifyInit(){
 
         $("#authorize").hide();
         $("#playlists").show();
+        $("#content").html("<p>To continue please pick a song from one of your playlists and we will show you the lyrics.");
     }
     else if(currentURL.includes("error")){
         let temp = currentURL.split('=');
+        $("#content").html("There was an error authorizing your Spotify account. Please try again.");
         console.log("Error receiving spotify access token: " + temp[1]);
     }
     else{
         $("#authorize").show();
         $("#playlists").hide();
+        $("#content").html("<h2>Welcome to How's It Go!</h2> <p> In order to proceed, please authorize your Spotify account! </p>");
     }
 
     if(testing){
         $("#authorize").hide();
         $("#playlists").show();
+            $("#content").html("<p>To continue please pick a song from one of your playlists and we will show you the lyrics.");
     }
 }
 
@@ -141,6 +145,7 @@ function playSong(song){
     let url = 'https://api.spotify.com/v1/me/player/play?device_id=' + deviceId;
     let data = '{"uris": ["spotify:track:' + song.id + '"]}';
     let success = function(response){
+        $("songInfo").html("Title: " + song.title + " Artist: " + song.artist + " Album: " + song.album);
         search(song.artist, song.title);
         console.log(response);
     };
@@ -166,6 +171,7 @@ function ajaxCall(url, data, success, type="GET"){
         data: data,
         success: success,
         error: function(xhr, status, error){
+            $("#content").html("There was an error accessing Spotify. Error: " + error);
             console.log(error);
         }
     });
