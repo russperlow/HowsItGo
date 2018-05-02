@@ -5,7 +5,7 @@ export {init};
 Vue.component('playlist-nested-song',{
     props:['song', 'index'],
     template:   `<b-card>
-                    <button v-on:click="songClick" :id="song.id" :class="{song: song}">{{song.title}}</button>
+                    <b-button v-on:click="songClick" :id="song.id" class="song">{{song.title}}</b-button>
                 </b-card>`,
     methods: {
         songClick: function(event){
@@ -62,8 +62,6 @@ let app = new Vue({
 
 
 function init(){
-    document.querySelector("#search").onclick = function(event){search();}
-
     let playlistBtn = document.querySelector("#playlist-collapse");
     playlistBtn.onclick = function(event){
         getPlaylist(function(playlists){

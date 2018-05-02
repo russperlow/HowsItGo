@@ -70,7 +70,10 @@ function jsonLoaded(obj){
         let track = result.track;
         let lyrics = track.text;
 
-        $("#content").html(lyrics);
+        let lineBreaks = lyrics.replace(new RegExp('\r?\n','g'), '<br />');
+
+
+        $("#content").html(lineBreaks);
     }
     else{
         $("#content").html("<strong><em>Sorry that song was not found! Please check to make sure the title and artist input was correct</em></strong>");
