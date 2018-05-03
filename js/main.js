@@ -1,5 +1,5 @@
 import {search} from './lyrics.js';
-import {spotifyInit, requestAuthorization, getPlaylist, playDemo, getPlaylistSongs, playSong} from './spotify.js';
+import {spotifyInit, requestAuthorization, getPlaylist, playDemo, getPlaylistSongs, playSong, pauseSong, resumeSong} from './spotify.js';
 export {init};
 
 Vue.component('playlist-nested-song',{
@@ -56,6 +56,12 @@ let app = new Vue({
         authorizeSpotify(){
             console.log("Clicked");
             requestAuthorization();
+        },
+        pause(){
+            pauseSong();
+        },
+        resume(){
+            resumeSong();
         }
     }
 });

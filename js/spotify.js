@@ -1,4 +1,4 @@
-export {spotifyInit, requestAuthorization, getPlaylist, playDemo, getPlaylistSongs, playSong};
+export {spotifyInit, requestAuthorization, getPlaylist, playDemo, getPlaylistSongs, playSong, pauseSong, resumeSong};
 import {search} from './lyrics.js';
 
 "use strict";
@@ -120,6 +120,23 @@ function playSong(song){
     ajaxCall(url, data, success, "PUT");
 }
 
+// Pauses a song that is playing
+function pauseSong(){
+    let url = 'https://api.spotify.com/v1/me/player/pause?device_id=' + deviceId;
+    let type = "PUT";
+    let data = null;
+    let success = function(){
+        console.log("Paused");
+    };
+    ajaxCall(url, data, success, type);
+}
+
+// Resumes a song that was paused
+function resumeSong(){
+    let url = 'https://api.spotify.com/v1/me/player/play';
+    ajaxCall(url, null, function(){console.log("Resume")}, "PUT");
+}
+
 // Play the demo song
 function playDemo(){
     let url = 'https://api.spotify.com/v1/me/player/play?device_id=' + deviceId;
@@ -151,16 +168,6 @@ function getPlaylistById(id){
             return playlists[i];
     }
     return null;
-}
-
-function pause(){
-    let url = 'https::/api.spotify.com/v1/me/player/pause?device_id=' + deviceId;
-    let type = "PUT";
-    let data = null;
-    let success = function(){
-        console.log("Paused");
-    };
-    ajaxCall();
 }
 
 window.onSpotifyWebPlaybackSDKReady = () => {
