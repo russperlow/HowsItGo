@@ -62,7 +62,7 @@ function ajax(type, url, data, callback){
 
 // for lyrics
 function jsonLoaded(obj){
-    console.log("Obj stringified: " + JSON.stringify(obj));
+    // console.log("Obj stringified: " + JSON.stringify(obj));
 
     if(obj.result != null){
 

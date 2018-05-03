@@ -1,5 +1,5 @@
 import {search} from './lyrics.js';
-import {spotifyInit, requestAuthorization, getPlaylist, playDemo, getPlaylistSongs, playSong, pauseSong, resumeSong} from './spotify.js';
+import {spotifyInit, requestAuthorization, getPlaylist, playDemo, getPlaylistSongs, playSong, playPlaylist, pauseSong, changeSong} from './spotify.js';
 export {init};
 
 Vue.component('playlist-nested-song',{
@@ -19,6 +19,10 @@ Vue.component('playlist-nested-collapse', {
     template:   `<b-card class="playlist-nested-card">
                     <b-btn v-b-toggle="list.id" :id="list.id"class="playlist-nested" v-on:click="playlistClick">{{list.name}}</b-btn>
                     <b-collapse :id="list.id" class="scrollbar-playlist scrollbar-primary">
+                        <b-card>
+                            <b-button class="playlist-playall" v-on:click="playAllClick">Play All</b-button>
+                        </b-card>
+    
                         <b-card is="playlist-nested-song" v-for="(song, index2) in list.songs" v-bind:song="song" v-bind:index="index2">
                         </b-card>
                     </b-collapse>
@@ -26,6 +30,9 @@ Vue.component('playlist-nested-collapse', {
     methods:{
         playlistClick: function(event){
             getPlaylistSongs(event.target.id);
+        },
+        playAllClick: function(event){
+            playPlaylist(this.list);
         }
     }
 });
@@ -60,8 +67,15 @@ let app = new Vue({
         pause(){
             pauseSong();
         },
-        resume(){
-            resumeSong();
+        play(){
+            // Send -1 to signify we are resuming
+            playSong(-1);
+        },
+        next(){
+            changeSong(1);
+        },
+        previous(){
+            changeSong(-1);
         }
     }
 });

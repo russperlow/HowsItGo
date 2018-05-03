@@ -88,12 +88,11 @@ body{
     background-color: rgba(0, 0, 0, 0.7);
 }
 
-.song{
+.playlist-playall, .song{
     width: 100%;
     background-color: rgba(65, 40, 84, .9);
 }
-
-.song:hover{
+.playlist-playall:hover, .song:hover{
     background-color: rgba(65, 40, 84, .7);
 }
 
