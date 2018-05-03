@@ -1,6 +1,6 @@
 import {search} from './lyrics.js';
 import {spotifyInit, requestAuthorization, getPlaylist, playDemo, getPlaylistSongs, playSong, playPlaylist, pauseSong, changeSong} from './spotify.js';
-export {init};
+export {init, updatePreviouslyPlayed};
 
 Vue.component('playlist-nested-song',{
     props:['song', 'index'],
@@ -50,11 +50,29 @@ Vue.component('playlist-collapse', {
                 </div>`
 });
 
+Vue.component('previously-played-row', {
+    props:['song', 'index'],
+    template: `<b-card class="previously-played-row">{{song.name}}
+                </b-card>`
+});
+
+Vue.component('previously-played', {
+    props:['songs', 'title'],
+    template: `<div>
+                <b-card id="previously-played" title="Previously Played">
+                    <b-card is="previously-played-row" v-for="(song, index) in songs" v-bind:song="song" v-bind:index="index">
+                    </b-card>
+                </b-card>
+              </div>`
+});
+
 let app = new Vue({
     el: '#root',
     data: {
         titleHeader: "Playlists:",
         lists: [],
+        previousHeader: "Previously Played",
+        previousSongs: []
     },
     methods:{
         loadPlaylists(playlists){
@@ -76,6 +94,9 @@ let app = new Vue({
         },
         previous(){
             changeSong(-1);
+        },
+        setPreviousSongs(previousSongs){
+            this.previousSongs = previousSongs;
         }
     }
 });
@@ -88,6 +109,48 @@ function init(){
             app.loadPlaylists(playlists);
         });
     };
-
+    app.setPreviousSongs(getPreviouslyPlayed());
     spotifyInit();
+}
+
+function updatePreviouslyPlayed(song){
+    let songTitle = song.name;
+    let songId = song.id;
+
+    let previousSongs = getPreviouslyPlayed();
+
+    let newSongs = [];
+    newSongs.push(song);
+
+    if(previousSongs != null){
+        // If this song is already on the list, don't add it again
+        for(let i = 0; i < previousSongs.length; i++){
+            if(previousSongs[i].id == songId){
+                return;
+            }
+        }
+
+        // Loop through the previous songs and add them to the new list
+        for(let i = 0; i < previousSongs.length; i++){
+
+            // To assure there are only 10 songs
+            if(i >= 10 || newSongs.length >= 10){
+                break;
+            }
+
+            if(previousSongs[i] != null){
+                newSongs.push(previousSongs[i]);
+            }
+        }
+    }
+
+    app.setPreviousSongs(newSongs);
+    newSongs = JSON.stringify(newSongs);
+    localStorage.setItem("previousSongs", newSongs);
+}
+
+function getPreviouslyPlayed(){
+    let previousSongs = localStorage.getItem("previousSongs");
+    previousSongs = JSON.parse(previousSongs);
+    return previousSongs;
 }

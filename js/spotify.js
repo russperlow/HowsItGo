@@ -1,5 +1,6 @@
 export {spotifyInit, requestAuthorization, getPlaylist, playDemo, getPlaylistSongs, playSong, playPlaylist, pauseSong, changeSong};
 import {search} from './lyrics.js';
+import {updatePreviouslyPlayed} from './main.js';
 
 "use strict";
 
@@ -134,6 +135,7 @@ function playSong(song){
     }
 }
 
+// Play an entire playlist
 function playPlaylist(playlist){
     let url = 'https://api.spotify.com/v1/me/player/play?device_id=' + deviceId;
     let songs = playlist.songs;
@@ -241,6 +243,8 @@ window.onSpotifyWebPlaybackSDKReady = () => {
             text += "<br/>Album: " + song.album.name;
 
             $("#songInfo").html(text);
+            updatePreviouslyPlayed(song);
+            currentSong = song;
         }
         console.log(state); 
     });
