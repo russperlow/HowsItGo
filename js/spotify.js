@@ -153,6 +153,16 @@ function getPlaylistById(id){
     return null;
 }
 
+function pause(){
+    let url = 'https::/api.spotify.com/v1/me/player/pause?device_id=' + deviceId;
+    let type = "PUT";
+    let data = null;
+    let success = function(){
+        console.log("Paused");
+    };
+    ajaxCall();
+}
+
 window.onSpotifyWebPlaybackSDKReady = () => {
 
 
