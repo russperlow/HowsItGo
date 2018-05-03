@@ -13,6 +13,8 @@ let user_id = ""; // The id of the user who signed in
 let display_name = ""; // The display name of the user who signed in
 let playlists = []; // Lists of the users playlists
 
+let currentSong; // The song that is currently playing
+
 function spotifyInit(){
     URL = 'https://accounts.spotify.com/authorize?client_id=' + client_id + '&redirect_uri=' + encodeURIComponent(redirect_uri) + "&scope=user-read-playback-state%20user-modify-playback-state%20streaming%20user-read-birthdate%20user-read-email%20user-read-private&response_type=token"; 
 
@@ -122,7 +124,6 @@ function playSong(song){
         let url = 'https://api.spotify.com/v1/me/player/play?device_id=' + deviceId;
         let data = '{"uris": ["spotify:track:' + song.id + '"]}';
         let success = function(response){
-            $("#songInfo").html("Title: " + song.title + "<br/>Artist: " + song.artist + "<br/>Album: " + song.album);
             search(song.artist, song.title);
             $("#play").hide();
             $("#pause").show();
@@ -231,7 +232,17 @@ window.onSpotifyWebPlaybackSDKReady = () => {
   
     // Playback status updates
     player.addListener('player_state_changed', state => {
-         console.log(state); 
+        let song = state.track_window.current_track;
+        if(currentSong != song){
+            let text = "Title: " + song.name + "<br/>Artist(s): " + song.artists[0].name;
+            for(let i = 1; i < song.artists.length; i++){
+                text += ", " + song.artists[i].name; 
+            }
+            text += "<br/>Album: " + song.album.name;
+
+            $("#songInfo").html(text);
+        }
+        console.log(state); 
     });
   
     // Ready
